@@ -118,13 +118,18 @@ jobs:
         run: |
           helm package ${{ env.CHART_PATH }} --destination .helm-packages
 
+      - name: Set lowercase owner
+        id: repo_owner
+        run: |
+          echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
       - name: Login to GitHub Container Registry
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
 
       - name: Push Helm Chart to GHCR
         run: |
-          helm push .helm-packages/${{ env.CHART_NAME }}-${{ steps.new_version.outputs.new_version }}.tgz oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
+          helm push .helm-packages/${{ env.CHART_NAME }}-${{ steps.new_version.outputs.new_version }}.tgz oci://${{ env.REGISTRY }}/${{ steps.repo_owner.outputs.owner }}/charts
 
       - name: Commit version bump
         run: |
@@ -146,10 +151,10 @@ jobs:
           echo "| Chart | ${{ env.CHART_NAME }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Previous Version | ${{ steps.get_version.outputs.current_version }} |" >> $GITHUB_STEP_SUMMARY
           echo "| New Version | ${{ steps.new_version.outputs.new_version }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| OCI Registry | \`oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts/${{ env.CHART_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| OCI Registry | \`oci://${{ env.REGISTRY }}/${{ steps.repo_owner.outputs.owner }}/charts/${{ env.CHART_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Installation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "helm install atuin oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts/${{ env.CHART_NAME }} --version ${{ steps.new_version.outputs.new_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "helm install atuin oci://${{ env.REGISTRY }}/${{ steps.repo_owner.outputs.owner }}/charts/${{ env.CHART_NAME }} --version ${{ steps.new_version.outputs.new_version }}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
