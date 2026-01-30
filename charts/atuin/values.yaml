@@ -35,7 +35,7 @@ postgresql:
     pullPolicy: IfNotPresent
   auth:
     username: atuin
-    password: "oldwinnt"  # Set via --set or use existingSecret
+    password: "yoursecret"  # Set via --set or use existingSecret
     database: atuin
     existingSecret: ""  # Name of existing secret with postgresql-password key
   persistence:
