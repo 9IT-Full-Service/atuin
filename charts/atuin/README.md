@@ -1,34 +1,34 @@
 # atuin
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 18.0.0](https://img.shields.io/badge/AppVersion-18.0.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 18.0.0](https://img.shields.io/badge/AppVersion-18.0.0-informational?style=flat-square)
 
 A Helm chart for Atuin - magical shell history sync
 
-**Homepage:** <https://atuin.sh>
+**Homepage:** <https://blog.kuepper.nrw>
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Atuin Team |  | <https://github.com/atuinsh/atuin> |
+| Rüdiger Küpper |  | <https://github.com/ruedigerp> |
 
 ## Source Code
 
-* <https://github.com/atuinsh/atuin>
+* <https://github.com/9it-full-service/atuin>
 
 ## Installation
 
 ### OCI Registry (recommended)
 
 ```bash
-helm install atuin oci://ghcr.io/9it-full-service/charts/atuin --version 0.1.2
+helm install atuin oci://ghcr.io/9it-full-service/charts/atuin --version 0.1.3
 ```
 
 ### With custom values
 
 ```bash
 helm install atuin oci://ghcr.io/9it-full-service/charts/atuin \
-  --version 0.1.2 \
+  --version 0.1.3 \
   --set postgresql.auth.password=mysecretpassword \
   --set ingress.hosts[0].host=atuin.example.com
 ```
