@@ -2,7 +2,7 @@ apiVersion: v2
 name: atuin
 description: A Helm chart for Atuin - magical shell history sync
 type: application
-version: 0.1.1
+version: 0.1.2
 appVersion: "18.0.0"
 keywords:
   - atuin
