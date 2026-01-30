@@ -9,9 +9,9 @@ keywords:
   - shell
   - history
   - sync
-home: https://atuin.sh
+home: https://blog.kuepper.nrw
 sources:
-  - https://github.com/atuinsh/atuin
+  - https://github.com/9it-full-service/atuin
 maintainers:
-  - name: Atuin Team
-    url: https://github.com/atuinsh/atuin
+  - name: Rüdiger Küpper
+    url: https://github.com/ruedigerp
