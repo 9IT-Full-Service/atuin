@@ -53,6 +53,14 @@ jobs:
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
+      - name: Install helm-docs
+        run: |
+          HELM_DOCS_VERSION="1.14.2"
+          curl -sSLo helm-docs.tar.gz https://github.com/norwoodj/helm-docs/releases/download/v${HELM_DOCS_VERSION}/helm-docs_${HELM_DOCS_VERSION}_Linux_x86_64.tar.gz
+          tar -xzf helm-docs.tar.gz helm-docs
+          sudo mv helm-docs /usr/local/bin/
+          rm helm-docs.tar.gz
+
       - name: Get current version
         id: get_version
         run: |
@@ -110,6 +118,10 @@ jobs:
           yq -i '.version = "${{ steps.new_version.outputs.new_version }}"' ${{ env.CHART_PATH }}/Chart.yaml
           cat ${{ env.CHART_PATH }}/Chart.yaml
 
+      - name: Generate helm-docs
+        run: |
+          helm-docs --chart-search-root=charts
+
       - name: Lint Helm Chart
         run: |
           helm lint ${{ env.CHART_PATH }}
@@ -131,9 +143,9 @@ jobs:
         run: |
           helm push .helm-packages/${{ env.CHART_NAME }}-${{ steps.new_version.outputs.new_version }}.tgz oci://${{ env.REGISTRY }}/${{ steps.repo_owner.outputs.owner }}/charts
 
-      - name: Commit version bump
+      - name: Commit version bump and docs
         run: |
-          git add ${{ env.CHART_PATH }}/Chart.yaml
+          git add ${{ env.CHART_PATH }}/Chart.yaml ${{ env.CHART_PATH }}/README.md
           git commit -m "chore(helm): bump chart version to ${{ steps.new_version.outputs.new_version }} [skip ci]"
           git push
 

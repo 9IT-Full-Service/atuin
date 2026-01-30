@@ -1,74 +1,115 @@
 # Default values for atuin
+# This is a YAML-formatted file.
+
+# -- Number of Atuin server replicas
 replicaCount: 1
 
 image:
+  # -- Atuin server image repository
   repository: ghcr.io/atuinsh/atuin
+  # -- Image pull policy
   pullPolicy: IfNotPresent
-  tag: ""  # Defaults to appVersion
+  # -- Overrides the image tag (default is the chart appVersion)
+  tag: ""
 
+# -- Image pull secrets for private registries
 imagePullSecrets: []
+# -- Override the name of the chart
 nameOverride: ""
+# -- Override the full name of the chart
 fullnameOverride: ""
 
 serviceAccount:
+  # -- Create a service account
   create: true
+  # -- Annotations for the service account
   annotations: {}
+  # -- Name of the service account (auto-generated if empty)
   name: ""
 
+# -- Annotations to add to the pod
 podAnnotations: {}
+# -- Security context for the pod
 podSecurityContext: {}
+# -- Security context for the container
 securityContext: {}
 
 # Atuin server configuration
 atuin:
+  # -- Host address to bind the server to
   host: "0.0.0.0"
+  # -- Port for the Atuin server
   port: 8888
+  # -- Allow new user registrations
   openRegistration: true
+  # -- Log level configuration
   logLevel: "info,atuin_server=debug"
 
 # PostgreSQL configuration
 postgresql:
+  # -- Enable PostgreSQL deployment
   enabled: true
   image:
+    # -- PostgreSQL image repository
     repository: postgres
+    # -- PostgreSQL image tag
     tag: "14"
+    # -- PostgreSQL image pull policy
     pullPolicy: IfNotPresent
   auth:
+    # -- PostgreSQL username
     username: atuin
-    password: "yoursecret"  # Set via --set or use existingSecret
+    # -- PostgreSQL password (use existingSecret in production)
+    password: "yoursecret"
+    # -- PostgreSQL database name
     database: atuin
-    existingSecret: ""  # Name of existing secret with postgresql-password key
+    # -- Use existing secret for password (key: postgresql-password)
+    existingSecret: ""
   persistence:
+    # -- Enable persistent storage for PostgreSQL
     enabled: true
+    # -- Storage class for the PVC (empty uses default)
     storageClass: ""
+    # -- Access modes for the PVC
     accessModes:
       - ReadWriteOnce
+    # -- Size of the persistent volume
     size: 10Gi
+  # -- Resource requests and limits for PostgreSQL
   resources: {}
 
 service:
+  # -- Kubernetes service type
   type: ClusterIP
+  # -- Service port
   port: 8888
 
 ingress:
+  # -- Enable ingress
   enabled: true
+  # -- Ingress class name
   className: "traefik"
-  annotations: 
-    cert-manager.io/cluster-issuer: "cf-letsencrypt-prod"
+  # -- Ingress annotations
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  # -- Ingress hosts configuration
   hosts:
-    - host: atuin.dev.kuepper.nrw
+    - host: atuin.yourserver.de
       paths:
         - path: /
           pathType: Prefix
-  tls: []
-  tls: 
+  # -- TLS configuration for ingress
+  tls:
     - secretName: atuin-tls
       hosts:
-        - atuin.dev.kuepper.nrw
+        - atuin.yourserver.de
 
+# -- Resource requests and limits for Atuin server
 resources: {}
 
-
+# -- Node selector for pod scheduling
 nodeSelector: {}
+# -- Tolerations for pod scheduling
 tolerations: []
+# -- Affinity rules for pod scheduling
 affinity: {}
