@@ -1,0 +1,73 @@
+# Default values for atuin
+replicaCount: 1
+
+image:
+  repository: ghcr.io/atuinsh/atuin
+  pullPolicy: IfNotPresent
+  tag: ""  # Defaults to appVersion
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+# Atuin server configuration
+atuin:
+  host: "0.0.0.0"
+  port: 8888
+  openRegistration: true
+  logLevel: "info,atuin_server=debug"
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  image:
+    repository: postgres
+    tag: "14"
+    pullPolicy: IfNotPresent
+  auth:
+    username: atuin
+    password: "oldwinnt"  # Set via --set or use existingSecret
+    database: atuin
+    existingSecret: ""  # Name of existing secret with postgresql-password key
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+  resources: {}
+
+service:
+  type: ClusterIP
+  port: 8888
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations: 
+    cert-manager.io/cluster-issuer: "cf-letsencrypt-prod"
+  hosts:
+    - host: atuin.dev.kuepper.nrw
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  tls: 
+    - secretName: atuin-tls
+      hosts:
+        - atuin.dev.kuepper.nrw
+
+resources: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

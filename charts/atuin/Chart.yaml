@@ -1,0 +1,17 @@
+apiVersion: v2
+name: atuin
+description: A Helm chart for Atuin - magical shell history sync
+type: application
+version: 0.1.0
+appVersion: "18.0.0"
+keywords:
+  - atuin
+  - shell
+  - history
+  - sync
+home: https://atuin.sh
+sources:
+  - https://github.com/atuinsh/atuin
+maintainers:
+  - name: Atuin Team
+    url: https://github.com/atuinsh/atuin
