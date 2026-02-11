@@ -53,7 +53,7 @@ postgresql:
     # -- PostgreSQL image repository
     repository: postgres
     # -- PostgreSQL image tag
-    tag: "14"
+    tag: "18"
     # -- PostgreSQL image pull policy
     pullPolicy: IfNotPresent
   auth:
